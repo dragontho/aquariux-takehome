@@ -1,4 +1,4 @@
-package com.dragontho.aqtakehome.model;
+package com.dragontho.aqtakehome.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
