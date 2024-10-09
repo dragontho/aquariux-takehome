@@ -24,9 +24,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
     @OneToMany(mappedBy = "user")
     private Set<Wallet> wallets;
 

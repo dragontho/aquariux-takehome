@@ -1,4 +1,7 @@
 package com.dragontho.aqtakehome.repositories;
 
-public class AggregatedPriceRepository {
+import com.dragontho.aqtakehome.models.AggregatedPrice;
+import org.springframework.data.repository.ListCrudRepository;
+
+public interface AggregatedPriceRepository extends ListCrudRepository<AggregatedPrice, Long> {
 }

@@ -17,8 +17,8 @@ public class AggregatedPrice {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id", nullable = false)
-    private CryptoCurrency currency;
+    @JoinColumn(name = "pair_id", nullable = false)
+    private CryptoCurrencyPair currencyPair;
 
     @Column(nullable = false)
     private BigDecimal bidPrice;

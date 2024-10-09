@@ -8,10 +8,10 @@ import reactor.core.publisher.Mono;
 
 @ApiClient
 @Slf4j
-public class BinanceApiImpl {
+public class BinanceApiClient {
     private final WebClient webClient;
 
-    public BinanceApiImpl(WebClient.Builder webClientBuilder) {
+    public BinanceApiClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://api.binance.com/api/v3").build();
     }
 

@@ -30,8 +30,8 @@ public class Transaction {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id", nullable = false)
-    private CryptoCurrency currency;
+    @JoinColumn(name = "pair_id", nullable = false)
+    private CryptoCurrencyPair currencyPair;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
