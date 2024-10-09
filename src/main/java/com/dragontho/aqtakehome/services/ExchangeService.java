@@ -6,6 +6,7 @@ import com.dragontho.aqtakehome.data.externapi.BinanceTicker;
 import com.dragontho.aqtakehome.data.externapi.HuobiTicker;
 import com.dragontho.aqtakehome.data.externapi.HuobiTickerResponse;
 import com.dragontho.aqtakehome.data.internapi.AggregatedPriceDto;
+import com.dragontho.aqtakehome.exceptions.InternalException;
 import com.dragontho.aqtakehome.models.AggregatedPrice;
 import com.dragontho.aqtakehome.repositories.AggregatedPriceRepository;
 import com.dragontho.aqtakehome.repositories.CryptoCurrencyPairRepository;
@@ -43,34 +44,27 @@ public class ExchangeService {
         this.taskExecutor = taskExecutor;
     }
 
-    public List<AggregatedPriceDto> getLatestAggregatedPrices() throws Exception {
+    public List<AggregatedPriceDto> getLatestAggregatedPrices() throws InternalException {
         List<AggregatedPrice> aggregatedPrices = aggregatedPriceRepository.findLatestPricesForAllPairs();
         if (aggregatedPrices.isEmpty()) {
-            throw new Exception("No available prices found for any symbol");
+            throw new InternalException("No available prices found for any symbol");
         }
         return aggregatedPrices.stream().map(AggregatedPriceDto::fromModel).collect(Collectors.toList());
     }
 
-    public AggregatedPriceDto getLatestAggregatedPrice(String symbol) throws Exception {
+    public AggregatedPriceDto getLatestAggregatedPrice(String symbol) throws InternalException {
         String symbolUpper = symbol.toUpperCase();
         Optional<AggregatedPrice> aggregatedPrice = aggregatedPriceRepository
                 .findTopByCurrencyPair_SymbolOrderByTimestampDesc(symbolUpper);
         if (aggregatedPrice.isEmpty()) {
-            throw new Exception("No available prices found for symbol " + symbolUpper);
+            throw new InternalException("No available prices found for symbol " + symbolUpper);
         }
         return AggregatedPriceDto.fromModel(aggregatedPrice.get());
     }
 
     public CompletableFuture<Void> aggregatePrices() {
         Set<String> symbols = Set.of("ETHUSDT", "BTCUSDT");
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return aggregatePriceForSymbols(symbols);
-            } catch (Exception e) {
-                log.error("Error during price aggregation: {}", e.getMessage(), e);
-                return null;
-            }
-        }, taskExecutor).thenAccept(result -> {
+        return CompletableFuture.supplyAsync(() -> aggregatePriceForSymbols(symbols), taskExecutor).thenAccept(result -> {
             if (result != null) {
                 log.info("Price aggregation completed at: {}", new Date());
             }
