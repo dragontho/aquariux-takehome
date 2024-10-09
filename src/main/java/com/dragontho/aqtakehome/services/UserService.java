@@ -5,6 +5,7 @@ import com.dragontho.aqtakehome.data.internapi.TransactionDtoPage;
 import com.dragontho.aqtakehome.data.internapi.WalletDto;
 import com.dragontho.aqtakehome.data.internapi.WalletDtoPage;
 import com.dragontho.aqtakehome.enums.TransactionType;
+import com.dragontho.aqtakehome.exceptions.InternalException;
 import com.dragontho.aqtakehome.models.*;
 import com.dragontho.aqtakehome.repositories.*;
 import lombok.extern.slf4j.Slf4j;
@@ -111,7 +112,7 @@ public class UserService {
             }
             fromWallet.setBalance(fromWallet.getBalance().subtract(sentAmount));
             if (fromWallet.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-                throw new Exception("Not enough balance");
+                throw new InternalException("Not enough balance");
             }
             walletRepository.save(fromWallet);
 
@@ -133,7 +134,7 @@ public class UserService {
             walletRepository.save(toWallet);
 
             return transaction;
-        } catch (Exception e) {
+        } catch (InternalException e) {
             log.error("Error executing trade: ", e);
             throw new RuntimeException("Failed to execute trade", e);
         }
