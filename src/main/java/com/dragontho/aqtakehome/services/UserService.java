@@ -1,6 +1,7 @@
 package com.dragontho.aqtakehome.services;
 
 import com.dragontho.aqtakehome.data.internapi.TransactionDto;
+import com.dragontho.aqtakehome.data.internapi.TransactionDtoPage;
 import com.dragontho.aqtakehome.data.internapi.WalletDto;
 import com.dragontho.aqtakehome.data.internapi.WalletDtoPage;
 import com.dragontho.aqtakehome.enums.TransactionType;
@@ -23,9 +24,9 @@ import java.util.Objects;
 public class UserService {
     private final CryptoCurrencyPairRepository cryptoCurrencyPairRepository;
     private final AggregatedPriceRepository aggregatedPriceRepository;
-    private UserRepository userRepository;
-    private TransactionRepository transactionRepository;
-    private WalletRepository walletRepository;
+    private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
+    private final WalletRepository walletRepository;
 
     @Autowired
     public UserService(TransactionRepository transactionRepository,
@@ -49,6 +50,19 @@ public class UserService {
         walletDtoPage.setPages(totalPages);
         walletDtoPage.setTotal(totalElements);
         return walletDtoPage;
+    }
+
+    public TransactionDtoPage getTransactions(String username, int page, int size) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+        Page<Transaction> transactions = transactionRepository.findByUserId(user.getId(), PageRequest.of(page, size));
+        int totalPages = transactions.getTotalPages();
+        long totalElements = transactions.getTotalElements();
+        List<TransactionDto> transactionDtos = transactions.stream().map(TransactionDto::fromModel).toList();
+        TransactionDtoPage transactionDtoPage = new TransactionDtoPage();
+        transactionDtoPage.setData(transactionDtos);
+        transactionDtoPage.setPages(totalPages);
+        transactionDtoPage.setTotal(totalElements);
+        return transactionDtoPage;
     }
 
     @Transactional
