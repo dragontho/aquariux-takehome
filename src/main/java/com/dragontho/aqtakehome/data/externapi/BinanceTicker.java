@@ -1,4 +1,4 @@
-package com.dragontho.aqtakehome.data;
+package com.dragontho.aqtakehome.data.externapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

@@ -2,8 +2,8 @@ package com.dragontho.aqtakehome.controllers;
 
 import com.dragontho.aqtakehome.api.BinanceApiClient;
 import com.dragontho.aqtakehome.api.HuobiApiClient;
-import com.dragontho.aqtakehome.data.BinanceTicker;
-import com.dragontho.aqtakehome.data.HuobiTickerResponse;
+import com.dragontho.aqtakehome.data.externapi.BinanceTicker;
+import com.dragontho.aqtakehome.data.externapi.HuobiTickerResponse;
 import com.dragontho.aqtakehome.models.User;
 import com.dragontho.aqtakehome.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
