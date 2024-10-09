@@ -20,13 +20,13 @@ public class AggregatedPrice {
     @JoinColumn(name = "pair_id", nullable = false)
     private CryptoCurrencyPair currencyPair;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 38, scale = 8)
     private BigDecimal bidPrice;
 
     @Column(nullable = false)
     private String bidPriceSource;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 38, scale = 8)
     private BigDecimal askPrice;
 
     @Column(nullable = false)

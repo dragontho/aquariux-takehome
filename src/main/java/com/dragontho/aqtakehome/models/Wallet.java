@@ -30,6 +30,6 @@ public class Wallet {
     @JoinColumn(name = "currency_id", nullable = false)
     private CryptoCurrency currency;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 38, scale = 8)
     private BigDecimal balance;
 }

@@ -37,8 +37,8 @@ public class DebugController {
     }
 
     @GetMapping("/getUser")
-    public List<User> getUsers() {
-        List<User> users = userRepository.findByUsername("user");
+    public User getUser() {
+        User users = userRepository.findByUsername("user").get();
         System.out.println("Users found: " + users);
         return users;
     }

@@ -5,6 +5,7 @@ import com.dragontho.aqtakehome.api.HuobiApiClient;
 import com.dragontho.aqtakehome.data.externapi.BinanceTicker;
 import com.dragontho.aqtakehome.data.externapi.HuobiTicker;
 import com.dragontho.aqtakehome.data.externapi.HuobiTickerResponse;
+import com.dragontho.aqtakehome.data.internapi.AggregatedPriceDto;
 import com.dragontho.aqtakehome.models.AggregatedPrice;
 import com.dragontho.aqtakehome.repositories.AggregatedPriceRepository;
 import com.dragontho.aqtakehome.repositories.CryptoCurrencyPairRepository;
@@ -42,22 +43,22 @@ public class ExchangeService {
         this.taskExecutor = taskExecutor;
     }
 
-    public List<com.dragontho.aqtakehome.data.internapi.AggregatedPrice> getLatestAggregatedPrices() throws Exception {
+    public List<AggregatedPriceDto> getLatestAggregatedPrices() throws Exception {
         List<AggregatedPrice> aggregatedPrices = aggregatedPriceRepository.findLatestPricesForAllPairs();
         if (aggregatedPrices.isEmpty()) {
             throw new Exception("No available prices found for any symbol");
         }
-        return aggregatedPrices.stream().map(com.dragontho.aqtakehome.data.internapi.AggregatedPrice::fromModel).collect(Collectors.toList());
+        return aggregatedPrices.stream().map(AggregatedPriceDto::fromModel).collect(Collectors.toList());
     }
 
-    public com.dragontho.aqtakehome.data.internapi.AggregatedPrice getLatestAggregatedPrice(String symbol) throws Exception {
+    public AggregatedPriceDto getLatestAggregatedPrice(String symbol) throws Exception {
         String symbolUpper = symbol.toUpperCase();
-        List<AggregatedPrice> aggregatedPrices = aggregatedPriceRepository
+        Optional<AggregatedPrice> aggregatedPrice = aggregatedPriceRepository
                 .findTopByCurrencyPair_SymbolOrderByTimestampDesc(symbolUpper);
-        if (aggregatedPrices.isEmpty()) {
+        if (aggregatedPrice.isEmpty()) {
             throw new Exception("No available prices found for symbol " + symbolUpper);
         }
-        return com.dragontho.aqtakehome.data.internapi.AggregatedPrice.fromModel(aggregatedPrices.get(0));
+        return AggregatedPriceDto.fromModel(aggregatedPrice.get());
     }
 
     public CompletableFuture<Void> aggregatePrices() {
