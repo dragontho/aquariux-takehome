@@ -1,16 +1,21 @@
 package com.dragontho.aqtakehome.services;
 
 import com.dragontho.aqtakehome.data.internapi.TransactionDto;
+import com.dragontho.aqtakehome.data.internapi.WalletDto;
+import com.dragontho.aqtakehome.data.internapi.WalletDtoPage;
 import com.dragontho.aqtakehome.enums.TransactionType;
 import com.dragontho.aqtakehome.models.*;
 import com.dragontho.aqtakehome.repositories.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -31,6 +36,19 @@ public class UserService {
         this.walletRepository = walletRepository;
         this.cryptoCurrencyPairRepository = cryptoCurrencyPairRepository;
         this.aggregatedPriceRepository = aggregatedPriceRepository;
+    }
+
+    public WalletDtoPage getWallets(String username, int page, int size) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+        Page<Wallet> wallets = walletRepository.findByUserId(user.getId(), PageRequest.of(page, size));
+        int totalPages = wallets.getTotalPages();
+        long totalElements = wallets.getTotalElements();
+        List<WalletDto> walletDtos = wallets.stream().map(WalletDto::fromModel).toList();
+        WalletDtoPage walletDtoPage = new WalletDtoPage();
+        walletDtoPage.setData(walletDtos);
+        walletDtoPage.setPages(totalPages);
+        walletDtoPage.setTotal(totalElements);
+        return walletDtoPage;
     }
 
     @Transactional
