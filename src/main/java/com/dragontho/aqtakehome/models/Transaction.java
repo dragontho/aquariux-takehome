@@ -1,5 +1,6 @@
 package com.dragontho.aqtakehome.models;
 
+import com.dragontho.aqtakehome.enums.TransactionType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,16 +38,12 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionType type;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 38, scale = 8)
     private BigDecimal amount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 38, scale = 8)
     private BigDecimal price;
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
-
-    public enum TransactionType {
-        BUY, SELL
-    }
 }
