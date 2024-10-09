@@ -1,7 +1,7 @@
 package com.dragontho.aqtakehome.api;
 
 import com.dragontho.aqtakehome.annotations.ApiClient;
-import com.dragontho.aqtakehome.data.BinanceTicker;
+import com.dragontho.aqtakehome.data.externapi.BinanceTicker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
